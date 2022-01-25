@@ -53,6 +53,19 @@ function var"archive-w/o-nth"(data    :: AbstractArray{Bool, 3},
     return create_archive(outname, slices, orig_ratio)
 end
 
+"""
+    archive(data, outname, n, mode)
+
+Create an archive of slices from 3D bit array with two-phase porous
+medium. When `mode` is `:take` (resp. `drop`) the archive is created
+by taking (resp. dropping) each `n`-th sample from `data`. It's when
+stored on disk with the name `outname`. This array has sufficient
+information to recover the original data (with some loss).
+
+See also: [`reconstruct`](@ref).
+"""
+function archive end
+
 archive(data, outname, n, :: Val{:take}) =
     var"archive-w/-nth"(data, outname, n)
 

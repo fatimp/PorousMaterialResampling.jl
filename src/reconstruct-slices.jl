@@ -37,6 +37,17 @@ function create_hints(slices :: AbstractArray{Bool, 3},
     return hints
 end
 
+"""
+    reconstruct(archivename; radius = 0.6, use_hints = false)
+
+Reconstruct two-phase porous medium from an archive of
+slices. `archivename` is the name of the archive. `radius` is a filter
+width used in Phase Reconstruction algorithm and the default value is
+usually good for all cases. When `use_hints` is `true` the slices are
+used not only for creation of autocorrelation function, but also in
+initial approximation of the porous medium. This results in a
+reconstruction with more visual resemblance with the original.
+"""
 function reconstruct(archivename :: AbstractString;
                      radius      :: AbstractFloat = 0.6,
                      use_hints   :: Bool          = false)
@@ -71,7 +82,7 @@ function reconstruct(archivename :: AbstractString;
 
     # Transform to unnormalized representation in the frequency
     # domain. Sometimes small negative values may occur after
-    # resampling. Just clamp all values in the range [0, ∞).
+    # resampling. Just clamp all values to the range [0, ∞).
     s2ft = max.(s2restored |> rfft |> real, 0) * length(s2restored)
 
     # Create hints if needed
