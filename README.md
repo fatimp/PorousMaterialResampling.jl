@@ -1,4 +1,5 @@
 # PorousMaterialResampling.jl
+[![CI](https://github.com/shamazmazum/PorousMaterialResampling.jl/actions/workflows/test.yml/badge.svg)](https://github.com/shamazmazum/PorousMaterialResampling.jl/actions/workflows/test.yml)
 
 This package uses Phase Recovery algorithm and resampling of autocorrelation
 function to reconstruct 3D two-phase porous materials (internally represented as
