@@ -14,6 +14,12 @@ ZipFile = "a5390f91-8eb1-5f08-bee0-b1d1ffed6cea"
 
 [compat]
 JSON = "0.21"
+FileIO = "1"
+FFTW = "1"
+PhaseRec = "0.1"
+Images = "0.25"
+ZipFile = "0.9"
+AutoCorrelationResampling = "0.1"
 julia = "^1.0"
 
 [extras]
