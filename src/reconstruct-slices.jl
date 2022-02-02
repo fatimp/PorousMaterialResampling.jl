@@ -7,14 +7,12 @@ function read_manifest(root)
     return JSON.parse(manifest)
 end
 
-# Ugly :(
 function create_hints(slices :: AbstractArray{Bool, 3},
                       ratio  :: Rational)
     n, m = numerator(ratio), denominator(ratio)
     x, y, z = size(slices)
-    newz = Int(ratio * z)
 
-    hints = rand(Bool, (x, y, newz))
+    hints = rand(Bool, (x, y, Int(ratio * z)))
 
     # = Original has each n-th sample
     if m == 1
@@ -23,12 +21,8 @@ function create_hints(slices :: AbstractArray{Bool, 3},
         end
     # = Original has each n-th sample dropped
     elseif n == m + 1
-        counter = 1
-        for k in 1:newz
-            if mod(k, n) != 0
-                hints[:,:,k] = slices[:,:, counter]
-                counter = counter + 1
-            end
+        for k in 1:z
+            hints[:,:,(k-1)÷m + k] = slices[:,:,k]
         end
     else
         throw("Hints are not supported for this ratio")
