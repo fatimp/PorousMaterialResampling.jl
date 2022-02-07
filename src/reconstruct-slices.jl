@@ -28,6 +28,11 @@ function create_hints(slices :: AbstractArray{Bool, 3},
         throw("Hints are not supported for this ratio")
     end
 
+    # KLUDGE: without this magic line the last slice of a
+    # reconstructed image will be a noisy mix of the first and the
+    # last slice of the original.
+    hints[:,:,end] = slices[:,:,end]
+
     return hints
 end
 
