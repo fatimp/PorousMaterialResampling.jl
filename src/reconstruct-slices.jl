@@ -49,7 +49,8 @@ reconstruction with more visual resemblance with the original.
 """
 function reconstruct(archivename :: AbstractString;
                      radius      :: AbstractFloat = 0.6,
-                     use_hints   :: Bool          = false)
+                     use_hints   :: Bool          = false,
+                     maxsteps                     = 300)
     local slices, ratio
 
     ZipFile.Reader(archivename) do root
@@ -88,6 +89,5 @@ function reconstruct(archivename :: AbstractString;
     hints = use_hints ? create_hints(slices, ratio) : nothing
     
     return PhaseRec.phaserec(s2ft, size(s2restored);
-                             radius = radius,
-                             noise  = hints)
+                             radius, maxsteps, noise  = hints)
 end
