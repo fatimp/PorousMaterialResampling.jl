@@ -3,6 +3,7 @@ import ZipFile
 import JSON
 import PhaseRec
 import AutoCorrelationResampling
+import Statistics
 
 using FileIO
 using Images
@@ -12,6 +13,6 @@ include("util.jl")
 include("create-slices.jl")
 include("reconstruct-slices.jl")
 
-export archive, reconstruct
+export archive, reconstruct, stupid_reconstruct
 
 end # module

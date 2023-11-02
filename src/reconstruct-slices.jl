@@ -91,3 +91,33 @@ function reconstruct(archivename :: AbstractString;
     return PhaseRec.phaserec(s2ft, size(s2restored);
                              radius, maxsteps, noise  = hints)
 end
+
+
+function stupid_reconstruct(archivename :: AbstractString; radius = 0.5)
+    local slices, ratio
+
+    ZipFile.Reader(archivename) do root
+        manifest = read_manifest(root)
+
+        ratio  = manifest["numerator"] // manifest["denominator"]
+        prefix = manifest["prefix"]
+        n      = manifest["amount"]
+
+        slices = mapreduce(stich, 1:n) do k
+            pic  = find_file(root, datafile("$(prefix)-$(k).png"))
+            # Here read all data and wrap in in another IO stream
+            # because ZipFile does not work well with FileIO. Julia
+            # cannot into abstractions.
+            rawdata = Vector{UInt8}(undef, pic.uncompressedsize)
+            read!(pic, rawdata)
+            rawdata |> IOBuffer |> Stream{format"PNG"} |> load .|> Float64
+        end
+    end
+
+    white_ratio = sum(slices) / length(slices)
+    gray = AutoCorrelationResampling.ac_resample(slices, ratio)
+    filter = PhaseRec.make_filter(size(gray), radius)
+    filtered = irfft(filter .* rfft(gray), size(gray, 1))
+    return filtered .> Statistics.quantile(reshape(filtered, length(filtered)),
+                                           1 - white_ratio)
+end
